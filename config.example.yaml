@@ -1,0 +1,91 @@
+schema_version: 1
+
+server:
+  probe_interval_seconds: 60
+  probe_timeout_seconds: 10
+  unavailable_after_failures: 3
+  max_concurrent_probes: 10
+  startup_probe_timeout_seconds: 30
+
+remotes:
+  - name: localhost
+    host: localhost
+    description: MCP 所在的本机
+    connection: local
+
+    health_checks:
+      - name: local
+        type: local
+        required: true
+
+    capabilities:
+      - name: codebuddy
+        description: 本机 CodeBuddy Code ACP 能力
+        usage: |
+          通过 codex-codebuddy MCP 创建 launch_mode=local 的会话；
+          cwd 使用本机项目目录，codebuddy_command 使用 /usr/local/bin/codebuddy。
+        health_checks:
+          - name: executable
+            type: command
+            argv: [/usr/local/bin/codebuddy, --version]
+            required: true
+
+  - name: black-lenovo
+    host: 192.168.0.98
+    description: 家用 RTX 3060 Laptop（另有 Tailscale 地址 100.125.171.64）
+    connection: ssh
+
+    ssh:
+      user: master
+      port: 22
+      auth:
+        type: agent
+      known_hosts: ~/.ssh/known_hosts
+      connect_timeout_seconds: 8
+
+    health_checks:
+      - name: ssh
+        type: ssh
+        required: true
+      - name: network-latency
+        type: ping
+        required: false
+        count: 1
+
+    capabilities:
+      - name: godot
+        description: 远端 Godot，由 godot-ai MCP 连接远端插件
+        usage: 通过 SSH 映射远端回环端口 8000 和 9500，再由 godot-ai MCP 连接。
+        health_checks:
+          - name: executable
+            type: command
+            argv: [/home/master/.local/bin/godot, --version]
+            required: true
+
+      - name: blender
+        description: 远端 Blender，由官方 Blender MCP 连接插件
+        usage: 通过 SSH 映射远端回环端口 9876，再由本机 blender-mcp 连接。
+        health_checks:
+          - name: executable
+            type: command
+            argv: [/home/master/Applications/blender-5.2.1-linux-x64/blender, --version]
+            required: true
+
+      - name: comfyui
+        description: 远端 ComfyUI 回环 HTTP API
+        usage: 通过 SSH 映射远端 127.0.0.1:8188，再使用 ComfyUI 客户端检查系统、队列和对象信息。
+        health_checks:
+          - name: api
+            type: curl
+            target: http://127.0.0.1:8188/system_stats
+            required: true
+            timeout_seconds: 5
+
+      - name: codebuddy
+        description: 远端 CodeBuddy Code，通过 codex-codebuddy MCP 建立 SSH ACP 会话
+        usage: 使用 codex-codebuddy MCP 的 SSH 模式，启动固定路径 /home/master/.local/bin/codebuddy。
+        health_checks:
+          - name: executable
+            type: command
+            argv: [/home/master/.local/bin/codebuddy, --version]
+            required: true

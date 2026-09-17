@@ -3,6 +3,17 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+# macOS metadata
+.DS_Store
+
+# Machine-specific runtime configuration and logs
+/config.yaml
+/config.yml
+/*.local.yaml
+/*.local.yml
+/logs/
+/remote-computer-use.log*
+
 # C extensions
 *.so
 

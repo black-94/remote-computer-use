@@ -1,0 +1,374 @@
+{
+  "$defs": {
+    "AuthConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "identity_file",
+            "agent"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "identity_file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Identity File"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "AuthConfig",
+      "type": "object"
+    },
+    "CapabilityConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "usage": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Usage"
+        },
+        "remark": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Remark",
+          "type": "array"
+        },
+        "health_checks": {
+          "items": {
+            "$ref": "#/$defs/HealthCheckConfig"
+          },
+          "title": "Health Checks",
+          "type": "array"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "CapabilityConfig",
+      "type": "object"
+    },
+    "HealthCheckConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "local",
+            "ssh",
+            "ping",
+            "tcp",
+            "telnet",
+            "nc",
+            "curl",
+            "path",
+            "process",
+            "command",
+            "script"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "required": {
+          "default": true,
+          "title": "Required",
+          "type": "boolean"
+        },
+        "timeout_seconds": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Timeout Seconds"
+        },
+        "count": {
+          "default": 1,
+          "maximum": 10,
+          "minimum": 1,
+          "title": "Count",
+          "type": "integer"
+        },
+        "target": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target"
+        },
+        "host": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Host"
+        },
+        "port": {
+          "anyOf": [
+            {
+              "maximum": 65535,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Port"
+        },
+        "argv": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Argv"
+        },
+        "script": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Script"
+        }
+      },
+      "required": [
+        "name",
+        "type"
+      ],
+      "title": "HealthCheckConfig",
+      "type": "object"
+    },
+    "RemoteConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "host": {
+          "minLength": 1,
+          "title": "Host",
+          "type": "string"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "connection": {
+          "default": "ssh",
+          "enum": [
+            "local",
+            "ssh"
+          ],
+          "title": "Connection",
+          "type": "string"
+        },
+        "ssh": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SSHConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "health_checks": {
+          "items": {
+            "$ref": "#/$defs/HealthCheckConfig"
+          },
+          "title": "Health Checks",
+          "type": "array"
+        },
+        "capabilities": {
+          "items": {
+            "$ref": "#/$defs/CapabilityConfig"
+          },
+          "title": "Capabilities",
+          "type": "array"
+        }
+      },
+      "required": [
+        "name",
+        "host"
+      ],
+      "title": "RemoteConfig",
+      "type": "object"
+    },
+    "SSHConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "user": {
+          "minLength": 1,
+          "title": "User",
+          "type": "string"
+        },
+        "port": {
+          "default": 22,
+          "maximum": 65535,
+          "minimum": 1,
+          "title": "Port",
+          "type": "integer"
+        },
+        "auth": {
+          "$ref": "#/$defs/AuthConfig"
+        },
+        "known_hosts": {
+          "default": "~/.ssh/known_hosts",
+          "title": "Known Hosts",
+          "type": "string"
+        },
+        "connect_timeout_seconds": {
+          "default": 8,
+          "exclusiveMinimum": 0,
+          "title": "Connect Timeout Seconds",
+          "type": "number"
+        }
+      },
+      "required": [
+        "user",
+        "auth"
+      ],
+      "title": "SSHConfig",
+      "type": "object"
+    },
+    "ServerConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "probe_interval_seconds": {
+          "default": 60,
+          "exclusiveMinimum": 0,
+          "title": "Probe Interval Seconds",
+          "type": "number"
+        },
+        "probe_timeout_seconds": {
+          "default": 10,
+          "exclusiveMinimum": 0,
+          "title": "Probe Timeout Seconds",
+          "type": "number"
+        },
+        "unavailable_after_failures": {
+          "default": 3,
+          "minimum": 1,
+          "title": "Unavailable After Failures",
+          "type": "integer"
+        },
+        "max_concurrent_probes": {
+          "default": 10,
+          "minimum": 1,
+          "title": "Max Concurrent Probes",
+          "type": "integer"
+        },
+        "startup_probe_timeout_seconds": {
+          "default": 30,
+          "exclusiveMinimum": 0,
+          "title": "Startup Probe Timeout Seconds",
+          "type": "number"
+        }
+      },
+      "title": "ServerConfig",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "server": {
+      "$ref": "#/$defs/ServerConfig"
+    },
+    "remotes": {
+      "items": {
+        "$ref": "#/$defs/RemoteConfig"
+      },
+      "title": "Remotes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version"
+  ],
+  "title": "AppConfig",
+  "type": "object"
+}
