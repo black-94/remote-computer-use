@@ -9,7 +9,7 @@ description = "Read-only MCP server for discovering and monitoring SSH remote ca
 readme = "README.md"
 requires-python = ">=3.11"
 license = { file = "LICENSE" }
-authors = [{ name = "black" }]
+authors = [{ name = "Remote Computer Use contributors" }]
 dependencies = [
   "asyncssh>=2.21,<3",
   "mcp>=1.26,<2",

@@ -36,16 +36,16 @@ remotes:
         health_checks:
           - name: executable
             type: command
-            argv: [/Users/black94/aliyun/ossutil/ossutil, version]
+            argv: [/opt/ossutil/ossutil, version]
             required: true
 
-  - name: black-lenovo
-    host: 192.168.0.98
-    description: 家用 RTX 3060 Laptop（另有 Tailscale 地址 100.125.171.64）
+  - name: gpu-remote
+    host: 203.0.113.10
+    description: GPU 远端示例
     connection: ssh
 
     ssh:
-      user: master
+      user: operator
       port: 22
       auth:
         type: agent
@@ -68,7 +68,7 @@ remotes:
         health_checks:
           - name: executable
             type: command
-            argv: [/home/master/.local/bin/godot, --version]
+            argv: [/opt/godot/bin/godot, --version]
             required: true
 
       - name: blender
@@ -77,7 +77,7 @@ remotes:
         health_checks:
           - name: executable
             type: command
-            argv: [/home/master/Applications/blender-5.2.1-linux-x64/blender, --version]
+            argv: [/opt/blender/blender, --version]
             required: true
 
       - name: comfyui
@@ -92,9 +92,9 @@ remotes:
 
       - name: codebuddy
         description: 远端 CodeBuddy Code，通过 codex-codebuddy MCP 建立 SSH ACP 会话
-        usage: 使用 codex-codebuddy MCP 的 SSH 模式，启动固定路径 /home/master/.local/bin/codebuddy。
+        usage: 使用 codex-codebuddy MCP 的 SSH 模式，启动远端配置中的 CodeBuddy 路径。
         health_checks:
           - name: executable
             type: command
-            argv: [/home/master/.local/bin/codebuddy, --version]
+            argv: [/opt/codebuddy/bin/codebuddy, --version]
             required: true

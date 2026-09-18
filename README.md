@@ -50,7 +50,7 @@ uv run remote-computer-use --config /absolute/path/config.yaml \
 
 ```bash
 uv run remote-computer-use check --config config.yaml
-uv run remote-computer-use check --config config.yaml --remote black-lenovo
+uv run remote-computer-use check --config config.yaml --remote <remote-name>
 ```
 
 ## MCP 客户端配置
@@ -152,15 +152,11 @@ SSH 认证模式：
 
 配置模型禁止额外字段，因此 `password`、`private_key`、`token` 等字段会导致校验失败。私钥内容不会进入进程配置、响应或日志。
 
-## 当前本机实例
+## 部署说明
 
-本机 Codex 已注册 `/Users/black94/project/remote-computer-use/.venv/bin/remote-computer-use`，读取被忽略的 `config.yaml`。其中：
+本机配置文件应放在被忽略的 `config.yaml` 中，MCP 客户端注册时使用本机虚拟环境中的入口程序。示例配置只使用文档保留地址、通用账户和占位路径，不包含真实主机、用户名、密钥或本机目录。
 
-- `localhost` 是本机直连对象，只探活 `/usr/local/bin/codebuddy --version`，不经过 SSH。
-- `black-lenovo` 使用 `master@192.168.0.98:22` 的 Agent 认证；同一主机的 Tailscale 地址为 `100.125.171.64`。
-- 远端固定版本路径为 `/home/master/.local/bin/godot`、`/home/master/Applications/blender-5.2.1-linux-x64/blender` 和 `/home/master/.local/bin/codebuddy`。
-- Godot MCP 的远端回环端口是 `8000`（HTTP）和 `9500`（插件 WebSocket）；Blender 插件配置端口是 `9876`；ComfyUI 回环 API 是 `8188`。
-- 这些端口需要由调用方按需建立 SSH 映射；本 MCP 只探活和说明，不建立隧道或转发业务请求。Godot、Blender、ComfyUI 未启动时，对应能力会按缓存状态显示为不可用或降级。
+远端能力的端口、程序路径和账户应按部署环境填写。端口映射由调用方按需建立；本 MCP 只探活和说明，不建立隧道或转发业务请求。
 
 ## 检查类型
 
