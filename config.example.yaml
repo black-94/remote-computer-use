@@ -30,6 +30,15 @@ remotes:
             argv: [/usr/local/bin/codebuddy, --version]
             required: true
 
+      - name: aliyun-oss
+        description: 本机 Aliyun OSS 对象存储工具
+        usage: 使用本机配置的 ossutil 访问 Aliyun OSS；本 MCP 只探活和说明，不执行对象操作。
+        health_checks:
+          - name: executable
+            type: command
+            argv: [/Users/black94/aliyun/ossutil/ossutil, version]
+            required: true
+
   - name: black-lenovo
     host: 192.168.0.98
     description: 家用 RTX 3060 Laptop（另有 Tailscale 地址 100.125.171.64）
